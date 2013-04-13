@@ -6,9 +6,15 @@ import android.view.Menu;
 
 public class MainActivity extends Activity {
 
+//	Renderer renderer = new Renderer();
+	MapLayout mapLayout = new MapLayout();
+	ItemPlotter itemPlotter = new ItemPlotter();
+	PathFinder pathFinder = new PathFinder();
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.activity_main);
     }
 
