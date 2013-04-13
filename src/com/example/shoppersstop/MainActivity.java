@@ -2,11 +2,14 @@ package com.example.shoppersstop;
 
 import android.os.Bundle;
 import android.app.Activity;
+
 import android.view.Menu;
 
 public class MainActivity extends Activity {
+
 	
 	private final Controller controller = new Controller();
+	private DataProvider dbProvider;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,15 +17,18 @@ public class MainActivity extends Activity {
         
         
         setContentView(R.layout.activity_main);
+        dbProvider = new DataProvider(this);
+		dbProvider.open();
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
 
     private class Controller{
 		
@@ -48,4 +54,12 @@ public class MainActivity extends Activity {
 		
 	}
     
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		dbProvider.close();
+	}
+
 }
