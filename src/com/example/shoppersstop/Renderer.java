@@ -1,9 +1,6 @@
 package com.example.shoppersstop;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;

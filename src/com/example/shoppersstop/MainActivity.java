@@ -5,15 +5,13 @@ import android.app.Activity;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
-
-//	Renderer renderer = new Renderer();
-	MapLayout mapLayout = new MapLayout();
-	ItemPlotter itemPlotter = new ItemPlotter();
-	PathFinder pathFinder = new PathFinder();
+	
+	private final Controller controller = new Controller();
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         
         setContentView(R.layout.activity_main);
     }
@@ -25,5 +23,29 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+
+    private class Controller{
+		
+    	//UI componenets
+		Renderer renderer = new Renderer(getBaseContext());
+		
+		//Algorithmic Componenets
+		MapLayout mapLayout = new MapLayout();
+		ItemPlotter itemPlotter = new ItemPlotter();
+		PathFinder pathFinder = new PathFinder();
+
+		//DB components
+		DBTalker dbTalker = new DBTalker();
+			
+		public void createList(){
+			
+		}
+		
+		private void getStoreMap(DBTalker dbTalker){
+			
+			
+		}
+		
+	}
     
 }
