@@ -1,9 +1,6 @@
 package com.example.shoppersstop;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -66,7 +63,7 @@ class Renderer extends View {
 		paintItem.setColor(Color.RED);
 		paintItem.setStyle(Paint.Style.FILL);
 		paintItem.setStrokeWidth(3);
-		canvas.drawRect(x[0], x[1], x[0] + 20, x[1] + 20, paintItem);
+		canvas.drawRect(x.getX(), x.getY(), x.getX() + 20, x.getY() + 20, paintItem);
 	}
 
 	protected void drawPath(Canvas canvas, int[] start, int[] stop) {
