@@ -3,6 +3,7 @@
 
     <string name="app_name">ShoppersStop</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="button_add">Add</string>
+    <string name="button_helpMeShop">Help me shop!</string>
+    
 </resources>

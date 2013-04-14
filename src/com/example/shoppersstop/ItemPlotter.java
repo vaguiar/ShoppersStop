@@ -11,7 +11,7 @@ public class ItemPlotter {
 	}
 
 	public void plotItems(List<ItemsMap> userItems) {
-//		renderer.setItems(userItems);
+		renderer.setItems(userItems);
 	}
 
 	

@@ -14,10 +14,17 @@ public class DataProvider {
 	// Database fields
 	private SQLiteDatabase database;
 	private CreateDatabase dbHelper;
-	private String[] allColumns = { CreateDatabase.COLUMN_Name,
+	private String[] allItemColumns = { CreateDatabase.COLUMN_Name,
 			CreateDatabase.COLUMN_Catagory, CreateDatabase.COLUMN_X,
 			CreateDatabase.COLUMN_Y };
 
+	private String[] allMapColumns = { CreateDatabase.COLUMN_ID,
+			CreateDatabase.COLUMN_Catagory, 
+			CreateDatabase.COLUMN_P1_X,
+			CreateDatabase.COLUMN_P1_Y,
+			CreateDatabase.COLUMN_P2_X,
+			CreateDatabase.COLUMN_P2_Y };
+	
 	public DataProvider(Context context) {
 		dbHelper = new CreateDatabase(context);
 	}
@@ -55,7 +62,7 @@ public class DataProvider {
 		for (int i = 0; i < items.size(); i++) {
 
 			Cursor cursor = database.query(CreateDatabase.TABLE_Items,
-					allColumns,
+					allItemColumns,
 					CreateDatabase.COLUMN_Name + " = '" + items.get(i) + "'",
 					null, null, null, null);
 
@@ -72,7 +79,7 @@ public class DataProvider {
 	public List<ItemsMap> getAllItemsMaps() {
 		List<ItemsMap> ItemsMaps = new ArrayList<ItemsMap>();
 
-		Cursor cursor = database.query(CreateDatabase.TABLE_Items, allColumns,
+		Cursor cursor = database.query(CreateDatabase.TABLE_Items, allItemColumns,
 				null, null, null, null, null);
 
 		cursor.moveToFirst();
@@ -100,7 +107,7 @@ public class DataProvider {
 	public List<StoreShelf> getAllStoreShelves() {
 		List<StoreShelf> storeMap = new ArrayList<StoreShelf>();
 
-		Cursor cursor = database.query(CreateDatabase.TABLE_Map, allColumns,
+		Cursor cursor = database.query(CreateDatabase.TABLE_Map, allMapColumns,
 				null, null, null, null, null);
 
 		cursor.moveToFirst();

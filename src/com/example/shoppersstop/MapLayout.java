@@ -23,6 +23,7 @@ public class MapLayout {
 		Rect [] shelves = new Rect[storeShelves.size()];
 		int i = 0;
 		for(StoreShelf each:storeShelves){
+			shelves[i] = new Rect();
 			shelves[i].left = each.getP1_X();
 			shelves[i].top = each.getP1_Y();
 			shelves[i].right = each.getP2_X();
