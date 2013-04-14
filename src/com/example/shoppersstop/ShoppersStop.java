@@ -12,8 +12,10 @@ import java.util.StringTokenizer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -37,7 +39,6 @@ public class ShoppersStop extends Activity {
 
 	// DB components
 	private DataProvider dbProvider;
-	List<String> shoppingList = new ArrayList<String>();
 
 	@SuppressLint("NewApi")
 	@Override
@@ -47,8 +48,14 @@ public class ShoppersStop extends Activity {
 		setContentView(R.layout.activity_main);
 		dbProvider = new DataProvider(getBaseContext());
 		dbProvider.open();
-		
-	
+
+/*		try {
+			insertIntoDB();
+			insertItemsIntoDB();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+
 		controller = new Controller();
 
 		bt = (Button) findViewById(R.id.button1);
@@ -72,8 +79,8 @@ public class ShoppersStop extends Activity {
 
 					if (!m_listItems.contains(input)) {
 						m_listItems.add(input);
+						controller.addToShoppingList(input);
 					}
-					addToShoppingList(input);
 
 					m_adapter.notifyDataSetChanged();
 					et.setText("");
@@ -85,20 +92,14 @@ public class ShoppersStop extends Activity {
 		bt2.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				
-				controller.initializeStore();
-				setContentView(controller.renderer);
 
-//				controller.plotItemsOnStoreMap(shoppingList);
-//				setContentView(controller.renderer);
+				controller.initializeStore();
+				controller.setItemCoordinates();
+				controller.plotItemsOnStoreMap();
+
+				setContentView(controller.renderer);
 			}
 		});
-	}
-
-	private void addToShoppingList(String input) {
-		if (!shoppingList.contains(input)) {
-			shoppingList.add(input);
-		}
 	}
 
 	@Override
@@ -114,19 +115,43 @@ public class ShoppersStop extends Activity {
 		Renderer renderer = new Renderer(getBaseContext());
 
 		// Algorithmic Componenets
-
 		MapLayout mapLayout = new MapLayout(renderer);
 		ItemPlotter itemPlotter = new ItemPlotter(renderer);
 		PathFinder pathFinder = new PathFinder();
 
-		private void initializeStore() {
+		// Data Structure components
+		private List<ItemsMap> itemCoordinates;
+		private List<String> shoppingList = new ArrayList<String>();
+
+		// setter
+		public void setItemCoordinates() {
+			if (shoppingList != null) {
+				this.itemCoordinates = dbProvider
+						.getSelectedtemsMaps(shoppingList);
+			}
+			else{
+				//Code to validate: Empty list is not propagated
+			}
+		}
+
+		// getter
+		public List<ItemsMap> getItemCoordinates() {
+			return this.itemCoordinates;
+		}
+
+		public void initializeStore() {
 			mapLayout.createMapLayout(dbProvider.getAllStoreShelves());
 		}
 
-		private void plotItemsOnStoreMap(List<String> userItemList) {
-			itemPlotter.plotItems(dbProvider.getSelectedtemsMaps(userItemList));
+		public void plotItemsOnStoreMap() {
+			itemPlotter.plotItems(itemCoordinates);
 		}
 
+		public void addToShoppingList(String input) {
+			if (!this.shoppingList.contains(input)) {
+				this.shoppingList.add(input);
+			}
+		}
 	}
 
 	@Override
@@ -136,17 +161,26 @@ public class ShoppersStop extends Activity {
 		dbProvider.close();
 	}
 
-	void insertIntoDB() throws IOException{
-		File f = new File(Environment.getExternalStorageDirectory().getPath() + "/nitesh/StoreMap");
+	@SuppressLint("NewApi")
+	void insertIntoDB() throws IOException {
+
+		Display dis = getWindowManager().getDefaultDisplay();
+		Point p = new Point();
+		dis.getSize(p);
+		float x = p.x / 1000f;
+		float y = p.y / 1000f;
+
+		File f = new File(Environment.getExternalStorageDirectory().getPath()
+				+ "/nitesh/StoreMap");
 		FileInputStream fileIS = new FileInputStream(f);
 		InputStreamReader iRdr = new InputStreamReader(fileIS);
 		BufferedReader bRdr = new BufferedReader(iRdr);
 		String val_ = " ";
-		while(val_ != null){
+		while (val_ != null) {
 			val_ = bRdr.readLine();
 			if (val_ == null || val_.length() < 10)
 				continue;
-			
+
 			StringTokenizer stok = new StringTokenizer(val_, " ");
 			StoreShelf smap = new StoreShelf();
 			smap.setCatagory(stok.nextToken());
@@ -154,13 +188,55 @@ public class ShoppersStop extends Activity {
 			smap.setP1_Y(Integer.parseInt(stok.nextToken().trim()));
 			smap.setP2_X(Integer.parseInt(stok.nextToken().trim()));
 			smap.setP2_Y(Integer.parseInt(stok.nextToken().trim()));
-			dbProvider.insertMap(smap.getCatagory(), 
-					smap.getP1_X(), 
-					smap.getP1_Y(), 
-					smap.getP2_X(), 
-					smap.getP2_Y());
+			dbProvider.insertMap(smap.getCatagory(),
+					(int) (smap.getP1_X() * x), (int) (smap.getP1_Y() * y),
+					(int) (smap.getP2_X() * x), (int) (smap.getP2_Y() * y));
+		}
+
+		bRdr.close();
+		iRdr.close();
+		fileIS.close();
+
+	}
+
+	@SuppressLint("NewApi")
+	void insertItemsIntoDB() throws IOException {
+		Display dis = getWindowManager().getDefaultDisplay();
+		Point p = new Point();
+		dis.getSize(p);
+		float x = p.x / 1000f;
+		float y = p.y / 1000f;
+
+		File f = new File(Environment.getExternalStorageDirectory().getPath()
+				+ "/nitesh/itemMap");
+		FileInputStream fileIS = new FileInputStream(f);
+		InputStreamReader iRdr = new InputStreamReader(fileIS);
+		BufferedReader bRdr = new BufferedReader(iRdr);
+		String val_ = " ";
+		int i = 0;
+		while (val_ != null) {
+			val_ = bRdr.readLine();
+			if (val_ == null || val_.length() < 10)
+				continue;
+
+			StringTokenizer stok = new StringTokenizer(val_, " ");
+			ItemsMap map = new ItemsMap();
+			map.setName(stok.nextToken());
+			map.setCatagory(stok.nextToken().trim());
+			if (i < 30) {
+				map.setX(Integer.parseInt(stok.nextToken().trim()));
+				map.setY(Integer.parseInt(stok.nextToken().trim()));
+			} else {
+				map.setX(Integer.parseInt(stok.nextToken().trim()) + 10);
+				map.setY(Integer.parseInt(stok.nextToken().trim()) + 10);
 			}
-		
+
+			i++;
+
+			dbProvider.insertItemsMap(map.getName(), map.getCatagory(),
+					(int) (map.getX() * x), (int) (map.getY() * y));
+		}
+
 		bRdr.close();
 		iRdr.close();
 		fileIS.close();

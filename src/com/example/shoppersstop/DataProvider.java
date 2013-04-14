@@ -124,7 +124,7 @@ public class DataProvider {
 	private ItemsMap cursorToItemsMap(Cursor cursor) {
 		ItemsMap ItemsMap = new ItemsMap();
 		ItemsMap.setName(cursor.getString(0));
-		ItemsMap.setName(cursor.getString(1));
+		ItemsMap.setCatagory(cursor.getString(1));
 		ItemsMap.setX(cursor.getInt(2));
 		ItemsMap.setY(cursor.getInt(3));
 		return ItemsMap;

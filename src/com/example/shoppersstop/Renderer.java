@@ -7,14 +7,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
+import android.widget.ScrollView;
 
-class Renderer extends View {
-	public static enum Type {
-		SHELF, PATH, ITEM
-	};
+class Renderer extends ScrollView {
 
 	Rect[] shelfs;
-	Type type;
 	List<ItemsMap> items;
 
 	List<int[]> path;
@@ -25,37 +22,26 @@ class Renderer extends View {
 
 	public void setShelfs(Rect[] shelfs) {
 		this.shelfs = shelfs;
-		this.type = Type.SHELF;
 	}
 
 	public void setItems(List<ItemsMap> items) {
 		this.items = items;
-		this.type = Type.ITEM;
 	}
-	
+
 	public void setPath(List<int[]> path) {
 		this.path = path;
-		this.type = Type.ITEM;
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		switch (type) {
-		case SHELF:
-			for (int i = 0; i < shelfs.length; i++) {
-				drawShelf(canvas, shelfs[i]);
-			}
-			break;
-		case PATH:
-			for (int i = 0; i < path.size() - 1; i++) {
-				drawPath(canvas, path.get(i), path.get(i + 1));
-			}
-			break;
-		case ITEM:
-			for (int i = 0; i < items.size(); i++) {
-				drawItem(canvas, items.get(i));
-			}
-			break;
+		for (int i = 0; i < shelfs.length; i++) {
+			drawShelf(canvas, shelfs[i]);
+		}
+//		for (int i = 0; i < path.size() - 1; i++) {
+//			drawPath(canvas, path.get(i), path.get(i + 1));
+//		}
+		for (int i = 0; i < items.size(); i++) {
+			drawItem(canvas, items.get(i));
 		}
 	}
 
@@ -64,7 +50,8 @@ class Renderer extends View {
 		paintItem.setColor(Color.RED);
 		paintItem.setStyle(Paint.Style.FILL);
 		paintItem.setStrokeWidth(3);
-		canvas.drawRect(x.getX(), x.getY(), x.getX() + 20, x.getY() + 20, paintItem);
+		canvas.drawRect(x.getX(), x.getY(), x.getX() + 20, x.getY() + 20,
+				paintItem);
 	}
 
 	protected void drawPath(Canvas canvas, int[] start, int[] stop) {
@@ -83,4 +70,3 @@ class Renderer extends View {
 		canvas.drawRect(r, myPaint);
 	}
 }
-
