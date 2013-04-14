@@ -18,7 +18,7 @@ class Renderer extends View {
 
 	Rect[] shelfs;
 	Type type;
-	List<int[]> items;
+	List<ItemsMap> items;
 	List<int[]> path;
 
 	public Renderer(Context context) {
@@ -30,7 +30,7 @@ class Renderer extends View {
 		this.type = Type.SHELF;
 	}
 
-	public void setItems(List<int[]> items) {
+	public void setItems(List<ItemsMap> items) {
 		this.items = items;
 		this.type = Type.ITEM;
 	}
@@ -61,7 +61,7 @@ class Renderer extends View {
 		}
 	}
 
-	protected void drawItem(Canvas canvas, int[] x) {
+	protected void drawItem(Canvas canvas, ItemsMap x) {
 		Paint paintItem = new Paint();
 		paintItem.setColor(Color.RED);
 		paintItem.setStyle(Paint.Style.FILL);
