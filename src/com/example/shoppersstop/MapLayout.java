@@ -14,8 +14,9 @@ public class MapLayout {
 
 	public void createMapLayout(List<StoreShelf> allStoreShelves) {
 		
-		renderer.setShelfs(getCoordinateList(allStoreShelves));
-			
+//		renderer.setShelfs(getCoordinateList(allStoreShelves));
+		renderer.setShelfs(allStoreShelves);	
+		
 	}
 
 	private Rect[] getCoordinateList(List<StoreShelf> storeShelves){

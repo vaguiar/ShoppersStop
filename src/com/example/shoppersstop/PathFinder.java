@@ -49,6 +49,7 @@ public class PathFinder {
 	}
 
 	private void setAntiClockBoundary(ItemsMap boundary) {
+
 		antiClockBoundary[0][0] = boundary.getX() / 2;
 		antiClockBoundary[0][1] = boundary.getY();
 
@@ -75,9 +76,11 @@ public class PathFinder {
 		
 		if (startPt.getX() <= boundary.getX() / 2) {
 			direction=dir.CLOCKWISE;
+			setClockBoundary(boundary);
 			quadrantPoints = clockWiseSort(itemCoordinates, boundary);
 		} else {
 			direction=dir.ANTICLOCKWISE;
+			setAntiClockBoundary(boundary);
 			quadrantPoints = antiClockWiseSort(itemCoordinates, boundary);
 		}
 		return enQueueItemPoints(startPt, endPt, itemCoordinates, quadrantPoints);
@@ -107,8 +110,7 @@ public class PathFinder {
 				itemQueue.add(temp_start);
 				quadrantPoints[i].remove(temp_start);
 
-			}
-			
+			}			
 		}
 		itemQueue.add(endPt);
 		

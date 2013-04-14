@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,9 +21,12 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ShoppersStop extends Activity {
 
@@ -32,7 +36,8 @@ public class ShoppersStop extends Activity {
 	Button bt2;
 	EditText et;
 	TextView tv;
-	ListView lv;
+	LinearLayout checkboxLayout;
+	//ListView lv;
 
 	private Controller controller;
 	Context m_context;
@@ -61,13 +66,23 @@ public class ShoppersStop extends Activity {
 		bt = (Button) findViewById(R.id.button1);
 		bt2 = (Button) findViewById(R.id.button2);
 		et = (EditText) findViewById(R.id.editText1);
-		lv = (ListView) findViewById(R.id.listView1);
-		lv.canScrollVertically(0);
-
+		//lv = (ListView) findViewById(R.id.listView1);
+		//lv.canScrollVertically(0);
+		
+		checkboxLayout = (LinearLayout) findViewById(R.id.Checkbox_Layout);
+        
+		List<ItemsMap> map = dbProvider.getAllItemsMaps();
+		for(int i = 0; i < map.size(); i++){
+			
+		    CheckBox cb = new CheckBox(getApplicationContext());
+            cb.setText(map.get(i).getName());
+            cb.setTextColor(Color.RED);
+            checkboxLayout.addView(cb);
+        	
+		}
+		
 		m_adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, m_listItems);
-		lv.setAdapter(m_adapter);
-		final String input = et.getText().toString();
 
 		bt.setOnClickListener(new View.OnClickListener() {
 
@@ -77,14 +92,11 @@ public class ShoppersStop extends Activity {
 
 				if (null != input && input.length() > 0) {
 
-					if (!m_listItems.contains(input)) {
-						m_listItems.add(input);
-						controller.addToShoppingList(input);
-					}
-
-					m_adapter.notifyDataSetChanged();
-					et.setText("");
-
+					CheckBox cb = new CheckBox(getApplicationContext());
+		            cb.setText(input);
+		            cb.setTextColor(Color.RED);
+		            checkboxLayout.addView(cb);
+		            et.setText("");
 				}
 			}
 		});
@@ -93,6 +105,15 @@ public class ShoppersStop extends Activity {
 
 			public void onClick(View v) {
 				
+				
+				for (int i = 0; i < checkboxLayout.getChildCount(); i++) {
+		            if (checkboxLayout.getChildAt(i) instanceof CheckBox) {
+		                CheckBox cb = (CheckBox) checkboxLayout.getChildAt(i);
+		                if (cb.isChecked()) {
+		                	controller.addToShoppingList(cb.getText().toString());
+		                }
+		            }
+		        }
 				
 				controller.initializeStore();
 				controller.setItemCoordinates();
@@ -136,6 +157,7 @@ public class ShoppersStop extends Activity {
 			StoreShelf sh = dbProvider.getSelectedShelf("ENTRANCE");
 			this.startPt.setX(sh.getP1_X());
 			this.startPt.setY(sh.getP1_Y());
+			this.startPt.setName(sh.getCatagory());
 		}
 
 		private ItemsMap getEndPt() {
@@ -146,6 +168,7 @@ public class ShoppersStop extends Activity {
 			StoreShelf sh = dbProvider.getSelectedShelf("Exit");
 			this.endPt.setX(sh.getP1_X());
 			this.endPt.setY(sh.getP1_Y());
+			this.endPt.setName(sh.getCatagory());
 		}
 
 		@SuppressLint("NewApi")

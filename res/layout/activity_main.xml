@@ -24,25 +24,6 @@
         <requestFocus />
     </EditText>
 
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="fill_parent"
-        android:layout_height="338dp"
-        android:layout_column="0"
-        android:layout_gravity="bottom"
-        android:layout_row="1" >
-    </ListView>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_column="0"
-        android:layout_gravity="center"
-        android:layout_row="2"
-        android:gravity="right"
-        android:text="@string/button_helpMeShop" />
-
     <Button
         android:id="@+id/button1"
         style="?android:attr/buttonStyleInset"
@@ -52,5 +33,28 @@
         android:layout_gravity="right"
         android:layout_row="0"
         android:text="@string/button_add" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_gravity="center_horizontal"
+        android:layout_row="2"
+        android:gravity="right"
+        android:text="@string/button_helpMeShop" />
+    <ScrollView
+       android:id="@+id/scrollView1"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignLeft="@+id/button1"
+       android:layout_below="@+id/button1" >
+        <LinearLayout
+           android:id="@+id/Checkbox_Layout"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical" >
+       </LinearLayout>
+   </ScrollView>
 
 </GridLayout>
