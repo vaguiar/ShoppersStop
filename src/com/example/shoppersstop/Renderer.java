@@ -16,6 +16,7 @@ class Renderer extends View {
 	Rect[] shelfs;
 	Type type;
 	List<ItemsMap> items;
+
 	List<int[]> path;
 
 	public Renderer(Context context) {
@@ -82,3 +83,4 @@ class Renderer extends View {
 		canvas.drawRect(r, myPaint);
 	}
 }
+
