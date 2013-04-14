@@ -63,10 +63,13 @@ public class DataProvider {
 					allItemColumns,
 					CreateDatabase.COLUMN_Name + " = '" + items.get(i).toUpperCase() + "'",
 					null, null, null, null);
-
-			cursor.moveToFirst();
-			ItemsMap newItemsMap = cursorToItemsMap(cursor);
-			ItemsMaps.add(newItemsMap);
+			
+			if(!cursor.isAfterLast()){
+				cursor.moveToFirst();
+				ItemsMap newItemsMap = cursorToItemsMap(cursor);
+				ItemsMaps.add(newItemsMap);
+			}
+			
 			cursor.close();
 
 		}
