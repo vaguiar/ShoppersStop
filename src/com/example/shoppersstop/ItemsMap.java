@@ -7,6 +7,16 @@ public class ItemsMap {
 	private int X;
 	private int Y;
 
+	public ItemsMap(){
+		
+	}
+	
+	//Used by compareFunction in PathFinder
+	public ItemsMap(int x, int y){
+		this.X = x;
+		this.Y = y;
+	}
+	
 	public String getName() {
 		return name;
 	}

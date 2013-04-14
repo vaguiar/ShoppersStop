@@ -14,7 +14,7 @@ class Renderer extends ScrollView {
 	Rect[] shelfs;
 	List<ItemsMap> items;
 
-	List<int[]> path;
+	List<ItemsMap> path;
 
 	public Renderer(Context context) {
 		super(context);
@@ -28,7 +28,7 @@ class Renderer extends ScrollView {
 		this.items = items;
 	}
 
-	public void setPath(List<int[]> path) {
+	public void setPath(List<ItemsMap> path) {
 		this.path = path;
 	}
 
@@ -37,9 +37,9 @@ class Renderer extends ScrollView {
 		for (int i = 0; i < shelfs.length; i++) {
 			drawShelf(canvas, shelfs[i]);
 		}
-//		for (int i = 0; i < path.size() - 1; i++) {
-//			drawPath(canvas, path.get(i), path.get(i + 1));
-//		}
+		for (int i = 0; i < path.size() - 1; i++) {
+			drawPath(canvas, path.get(i), path.get(i + 1));
+		}
 		for (int i = 0; i < items.size(); i++) {
 			drawItem(canvas, items.get(i));
 		}
@@ -54,12 +54,12 @@ class Renderer extends ScrollView {
 				paintItem);
 	}
 
-	protected void drawPath(Canvas canvas, int[] start, int[] stop) {
+	protected void drawPath(Canvas canvas, ItemsMap start, ItemsMap stop) {
 		Paint paintPath = new Paint();
 		paintPath.setColor(Color.GREEN);
 		paintPath.setStyle(Paint.Style.STROKE);
 		paintPath.setStrokeWidth(3);
-		canvas.drawLine(start[0], start[1], stop[0], stop[1], paintPath);
+		canvas.drawLine(start.getX(), start.getY(), stop.getX(), stop.getY(), paintPath);
 	}
 
 	protected void drawShelf(Canvas canvas, Rect r) {

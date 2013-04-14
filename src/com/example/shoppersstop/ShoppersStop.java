@@ -49,12 +49,12 @@ public class ShoppersStop extends Activity {
 		dbProvider = new DataProvider(getBaseContext());
 		dbProvider.open();
 
-/*		try {
-			insertIntoDB();
-			insertItemsIntoDB();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
+//		try {
+//			insertIntoDB();
+//			insertItemsIntoDB();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 
 		controller = new Controller();
 
@@ -96,6 +96,7 @@ public class ShoppersStop extends Activity {
 				controller.initializeStore();
 				controller.setItemCoordinates();
 				controller.plotItemsOnStoreMap();
+				controller.findShortestPath() ;
 
 				setContentView(controller.renderer);
 			}
@@ -117,20 +118,51 @@ public class ShoppersStop extends Activity {
 		// Algorithmic Componenets
 		MapLayout mapLayout = new MapLayout(renderer);
 		ItemPlotter itemPlotter = new ItemPlotter(renderer);
-		PathFinder pathFinder = new PathFinder();
+		PathFinder pathFinder = new PathFinder(renderer);
 
 		// Data Structure components
+		private ItemsMap startPt = new ItemsMap();
+		private ItemsMap endPt = new ItemsMap();
+		private ItemsMap boundary = new ItemsMap();
 		private List<ItemsMap> itemCoordinates;
 		private List<String> shoppingList = new ArrayList<String>();
+
+		private ItemsMap getStartPt() {
+			return startPt;
+		}
+
+		private void setStartPt() {
+			StoreShelf sh = dbProvider.getSelectedShelf("ENTRANCE");
+			this.startPt.setX(sh.getP1_X());
+			this.startPt.setY(sh.getP1_Y());
+		}
+
+		private ItemsMap getEndPt() {
+			return endPt;
+		}
+
+		private void setEndPt() {
+			StoreShelf sh = dbProvider.getSelectedShelf("Exit");
+			this.endPt.setX(sh.getP1_X());
+			this.endPt.setY(sh.getP1_Y());
+		}
+
+		@SuppressLint("NewApi")
+		private void setBoundary() {
+			Display dis = getWindowManager().getDefaultDisplay();
+			Point p = new Point();
+			dis.getSize(p);
+			boundary.setX(p.x);
+			boundary.setY(p.y);
+		}
 
 		// setter
 		public void setItemCoordinates() {
 			if (shoppingList != null) {
 				this.itemCoordinates = dbProvider
 						.getSelectedtemsMaps(shoppingList);
-			}
-			else{
-				//Code to validate: Empty list is not propagated
+			} else {
+				// Code to validate: Empty list is not propagated
 			}
 		}
 
@@ -148,10 +180,20 @@ public class ShoppersStop extends Activity {
 		}
 
 		public void addToShoppingList(String input) {
+
 			if (!this.shoppingList.contains(input)) {
 				this.shoppingList.add(input);
 			}
 		}
+
+		public void findShortestPath() {
+			setStartPt();
+			setEndPt();
+			pathFinder.calculatePath(itemCoordinates, getStartPt(), getEndPt(),
+					boundary);
+
+		}
+
 	}
 
 	@Override

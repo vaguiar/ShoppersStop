@@ -19,12 +19,10 @@ public class DataProvider {
 			CreateDatabase.COLUMN_Y };
 
 	private String[] allMapColumns = { CreateDatabase.COLUMN_ID,
-			CreateDatabase.COLUMN_Catagory, 
-			CreateDatabase.COLUMN_P1_X,
-			CreateDatabase.COLUMN_P1_Y,
-			CreateDatabase.COLUMN_P2_X,
+			CreateDatabase.COLUMN_Catagory, CreateDatabase.COLUMN_P1_X,
+			CreateDatabase.COLUMN_P1_Y, CreateDatabase.COLUMN_P2_X,
 			CreateDatabase.COLUMN_P2_Y };
-	
+
 	public DataProvider(Context context) {
 		dbHelper = new CreateDatabase(context);
 	}
@@ -39,8 +37,8 @@ public class DataProvider {
 
 	public void insertItemsMap(String name, String catagory, int X, int Y) {
 		ContentValues values = new ContentValues();
-		values.put(CreateDatabase.COLUMN_Name, name);
-		values.put(CreateDatabase.COLUMN_Catagory, catagory);
+		values.put(CreateDatabase.COLUMN_Name, name.toUpperCase());
+		values.put(CreateDatabase.COLUMN_Catagory, catagory.toUpperCase());
 		values.put(CreateDatabase.COLUMN_X, X);
 		values.put(CreateDatabase.COLUMN_Y, Y);
 		database.insert(CreateDatabase.TABLE_Items, null, values);
@@ -63,7 +61,7 @@ public class DataProvider {
 
 			Cursor cursor = database.query(CreateDatabase.TABLE_Items,
 					allItemColumns,
-					CreateDatabase.COLUMN_Name + " = '" + items.get(i) + "'",
+					CreateDatabase.COLUMN_Name + " = '" + items.get(i).toUpperCase() + "'",
 					null, null, null, null);
 
 			cursor.moveToFirst();
@@ -79,8 +77,8 @@ public class DataProvider {
 	public List<ItemsMap> getAllItemsMaps() {
 		List<ItemsMap> ItemsMaps = new ArrayList<ItemsMap>();
 
-		Cursor cursor = database.query(CreateDatabase.TABLE_Items, allItemColumns,
-				null, null, null, null, null);
+		Cursor cursor = database.query(CreateDatabase.TABLE_Items,
+				allItemColumns, null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -96,7 +94,7 @@ public class DataProvider {
 	public void insertMap(String catagory, int P1_X, int P1_Y, int P2_X,
 			int P2_Y) {
 		ContentValues values = new ContentValues();
-		values.put(CreateDatabase.COLUMN_Catagory, catagory);
+		values.put(CreateDatabase.COLUMN_Catagory, catagory.toUpperCase());
 		values.put(CreateDatabase.COLUMN_P1_X, P1_X);
 		values.put(CreateDatabase.COLUMN_P1_Y, P1_Y);
 		values.put(CreateDatabase.COLUMN_P2_X, P2_X);
@@ -105,7 +103,7 @@ public class DataProvider {
 	}
 
 	public List<StoreShelf> getAllStoreShelves() {
-		List<StoreShelf> storeMap = new ArrayList<StoreShelf>();
+		List<StoreShelf> storeShelf = new ArrayList<StoreShelf>();
 
 		Cursor cursor = database.query(CreateDatabase.TABLE_Map, allMapColumns,
 				null, null, null, null, null);
@@ -113,14 +111,26 @@ public class DataProvider {
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			StoreShelf map = cursorToStoreMap(cursor);
-			storeMap.add(map);
+			storeShelf.add(map);
 			cursor.moveToNext();
 		}
 		// Make sure to close the cursor
 		cursor.close();
-		return storeMap;
+		return storeShelf;
 	}
-	
+
+	public StoreShelf getSelectedShelf(String name) {
+		StoreShelf shelf = null;
+		Cursor cursor = database.query(CreateDatabase.TABLE_Map, allMapColumns,
+				CreateDatabase.COLUMN_Catagory + " = '" + name.toUpperCase()
+						+ "'", null, null, null, null);
+
+		cursor.moveToFirst();
+		shelf = cursorToStoreMap(cursor);
+		cursor.close();
+		return shelf;
+	}
+
 	private ItemsMap cursorToItemsMap(Cursor cursor) {
 		ItemsMap ItemsMap = new ItemsMap();
 		ItemsMap.setName(cursor.getString(0));
@@ -131,19 +141,19 @@ public class DataProvider {
 	}
 
 	private StoreShelf cursorToStoreMap(Cursor cursor) {
-		
-		StoreShelf storeMap = new StoreShelf();
-		storeMap.setCatagory(cursor.getString(cursor
+
+		StoreShelf storeShelf = new StoreShelf();
+		storeShelf.setCatagory(cursor.getString(cursor
 				.getColumnIndex(CreateDatabase.COLUMN_Catagory)));
-		storeMap.setP1_X(cursor.getInt(cursor
+		storeShelf.setP1_X(cursor.getInt(cursor
 				.getColumnIndex(CreateDatabase.COLUMN_P1_X)));
-		storeMap.setP1_Y(cursor.getInt(cursor
+		storeShelf.setP1_Y(cursor.getInt(cursor
 				.getColumnIndex(CreateDatabase.COLUMN_P1_Y)));
-		storeMap.setP2_X(cursor.getInt(cursor
+		storeShelf.setP2_X(cursor.getInt(cursor
 				.getColumnIndex(CreateDatabase.COLUMN_P2_X)));
-		storeMap.setP2_Y(cursor.getInt(cursor
+		storeShelf.setP2_Y(cursor.getInt(cursor
 				.getColumnIndex(CreateDatabase.COLUMN_P2_Y)));
 
-		return storeMap;
+		return storeShelf;
 	}
 }
