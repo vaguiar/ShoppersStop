@@ -49,8 +49,7 @@ class Renderer extends ScrollView {
 		Paint paintItem = new Paint();
 		paintItem.setColor(Color.RED);
 		paintItem.setStyle(Paint.Style.FILL);
-		paintItem.setStrokeWidth(3);
-		canvas.drawRect(x.getX(), x.getY(), x.getX() + 20, x.getY() + 20,
+		canvas.drawRect(x.getX(), x.getY(), x.getX() + 10, x.getY() + 10,
 				paintItem);
 	}
 
@@ -58,7 +57,7 @@ class Renderer extends ScrollView {
 		Paint paintPath = new Paint();
 		paintPath.setColor(Color.GREEN);
 		paintPath.setStyle(Paint.Style.STROKE);
-		paintPath.setStrokeWidth(3);
+		paintPath.setStrokeWidth(5);
 		canvas.drawLine(start.getX(), start.getY(), stop.getX(), stop.getY(), paintPath);
 	}
 

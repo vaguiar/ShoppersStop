@@ -92,7 +92,8 @@ public class ShoppersStop extends Activity {
 		bt2.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-
+				
+				
 				controller.initializeStore();
 				controller.setItemCoordinates();
 				controller.plotItemsOnStoreMap();
@@ -153,9 +154,14 @@ public class ShoppersStop extends Activity {
 			Point p = new Point();
 			dis.getSize(p);
 			boundary.setX(p.x);
-			boundary.setY(p.y);
+			boundary.setY(p.y -120);
 		}
 
+
+		private ItemsMap getBoundary() {
+			return this.boundary;
+		}
+		
 		// setter
 		public void setItemCoordinates() {
 			if (shoppingList != null) {
@@ -189,10 +195,12 @@ public class ShoppersStop extends Activity {
 		public void findShortestPath() {
 			setStartPt();
 			setEndPt();
+			setBoundary();
 			pathFinder.calculatePath(itemCoordinates, getStartPt(), getEndPt(),
-					boundary);
+					getBoundary());
 
 		}
+
 
 	}
 

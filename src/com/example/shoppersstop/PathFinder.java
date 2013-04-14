@@ -74,11 +74,11 @@ public class PathFinder {
 		List[] quadrantPoints = new ArrayList[4];
 		
 		if (startPt.getX() <= boundary.getX() / 2) {
-			direction=dir.ANTICLOCKWISE;
-			quadrantPoints = antiClockWiseSort(itemCoordinates, boundary);
-		} else {
 			direction=dir.CLOCKWISE;
 			quadrantPoints = clockWiseSort(itemCoordinates, boundary);
+		} else {
+			direction=dir.ANTICLOCKWISE;
+			quadrantPoints = antiClockWiseSort(itemCoordinates, boundary);
 		}
 		return enQueueItemPoints(startPt, endPt, itemCoordinates, quadrantPoints);
 	}
@@ -87,11 +87,12 @@ public class PathFinder {
 			List<ItemsMap> itemCoordinates, List[] quadrantPoints) {
 		
 		 List <ItemsMap> itemQueue = new LinkedList<ItemsMap>() ;
-		ItemsMap temp_start = new ItemsMap() ;
+		ItemsMap temp_start;
 		
 		itemQueue.add(startPt);
 				
 		for(int i = 0; i < quadrantPoints.length; i++){
+			temp_start = new ItemsMap();
 			if(direction ==  dir.CLOCKWISE){
 				temp_start.setX(clockBoundary[i][0]);
 				temp_start.setY(clockBoundary[i][1]);
@@ -105,6 +106,7 @@ public class PathFinder {
 				temp_start = getMinimum(temp_start,quadrantPoints[i]);
 				itemQueue.add(temp_start);
 				quadrantPoints[i].remove(temp_start);
+
 			}
 			
 		}
