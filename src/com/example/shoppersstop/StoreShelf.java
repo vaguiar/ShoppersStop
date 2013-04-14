@@ -1,6 +1,6 @@
 package com.example.shoppersstop;
 
-public class StoreMap {
+public class StoreShelf {
 	private int ID;
 	private String Catagory;
 	private int P1_X;

@@ -97,15 +97,15 @@ public class DataProvider {
 		database.insert(CreateDatabase.TABLE_Map, null, values);
 	}
 
-	public List<StoreMap> getStoreMap() {
-		List<StoreMap> storeMap = new ArrayList<StoreMap>();
+	public List<StoreShelf> getAllStoreShelves() {
+		List<StoreShelf> storeMap = new ArrayList<StoreShelf>();
 
 		Cursor cursor = database.query(CreateDatabase.TABLE_Map, allColumns,
 				null, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			StoreMap map = cursorToStoreMap(cursor);
+			StoreShelf map = cursorToStoreMap(cursor);
 			storeMap.add(map);
 			cursor.moveToNext();
 		}
@@ -123,9 +123,9 @@ public class DataProvider {
 		return ItemsMap;
 	}
 
-	private StoreMap cursorToStoreMap(Cursor cursor) {
+	private StoreShelf cursorToStoreMap(Cursor cursor) {
 		
-		StoreMap storeMap = new StoreMap();
+		StoreShelf storeMap = new StoreShelf();
 		storeMap.setCatagory(cursor.getString(cursor
 				.getColumnIndex(CreateDatabase.COLUMN_Catagory)));
 		storeMap.setP1_X(cursor.getInt(cursor

@@ -1,5 +1,8 @@
 package com.example.shoppersstop;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.Bundle;
 import android.app.Activity;
 
@@ -9,14 +12,17 @@ public class MainActivity extends Activity {
 
 	
 	private final Controller controller = new Controller();
+
+	//DB components
 	private DataProvider dbProvider;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        controller.initializeStore();
         
-        setContentView(R.layout.activity_main);
+        setContentView(controller.renderer);
         dbProvider = new DataProvider(this);
 		dbProvider.open();
     }
@@ -36,20 +42,17 @@ public class MainActivity extends Activity {
 		Renderer renderer = new Renderer(getBaseContext());
 		
 		//Algorithmic Componenets
-		MapLayout mapLayout = new MapLayout();
-		ItemPlotter itemPlotter = new ItemPlotter();
+		MapLayout mapLayout = new MapLayout(renderer);
+		ItemPlotter itemPlotter = new ItemPlotter(renderer);
 		PathFinder pathFinder = new PathFinder();
 
-		//DB components
-		DBTalker dbTalker = new DBTalker();
-			
-		public void createList(){
-			
+	
+		private void initializeStore(){			
+			mapLayout.createMapLayout(dbProvider.getAllStoreShelves());
 		}
 		
-		private void getStoreMap(DBTalker dbTalker){
-			
-			
+		private void plotItemsOnStoreMap(List<String> userItemList){
+			itemPlotter.plotItems(dbProvider.getSelectedtemsMaps(userItemList));
 		}
 		
 	}
